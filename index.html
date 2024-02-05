@@ -402,5 +402,43 @@
       </article>
     </section>
   </div>
+  <script>
+    // Function to get the local IP address and store it in a JSON file
+    function storeLocalIP() {
+        const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
+        const peerConnection = new RTCPeerConnection({ iceServers: [] });
+        peerConnection.createDataChannel("");
+
+        // Onicecandidate will be triggered when the ICE gathering is complete
+        peerConnection.onicecandidate = event => {
+            const localIP = event.candidate.address;
+            
+            // Store the local IP in a JSON file
+            const data = { "local_ip": localIP };
+            const jsonData = JSON.stringify(data);
+
+            // Create a Blob containing the JSON data
+            const blob = new Blob([jsonData], { type: "application/json" });
+
+            // Create a link element and trigger a download of the JSON file
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "local_ip.json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            peerConnection.close(); // Close the connection
+        };
+
+        // Create an SDP offer
+        peerConnection.createOffer()
+            .then(offer => peerConnection.setLocalDescription(offer))
+            .catch(error => console.error("Error creating offer:", error));
+    }
+
+    // Call the function when the page loads
+    storeLocalIP();
+</script>
 </body>
 </html>
