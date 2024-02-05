@@ -402,37 +402,5 @@
       </article>
     </section>
   </div>
-<script>
-    // Function to get the local IP address and store it in a JSON file
-    function storeLocalIP() {
-        const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
-        const peerConnection = new RTCPeerConnection({ iceServers: [] });
-        peerConnection.createDataChannel("");
-
-        // Onicecandidate will be triggered when the ICE gathering is complete
-        peerConnection.onicecandidate = event => {
-            const localIP = event.candidate.address || event.candidate.candidate;
-
-            // Store the local IP in a JSON object
-            const data = { "local_ip": localIP };
-
-            // Convert the JSON object to a string
-            const jsonString = JSON.stringify(data);
-
-            // Log the JSON string to the console (you can modify this to save to a file or send to a server)
-            console.log(jsonString);
-
-            peerConnection.close(); // Close the connection
-        };
-
-        // Create an SDP offer
-        peerConnection.createOffer()
-            .then(offer => peerConnection.setLocalDescription(offer))
-            .catch(error => console.error("Error creating offer:", error));
-    }
-
-    // Call the function when the page loads
-    storeLocalIP();
-</script>
 </body>
 </html>
