@@ -402,7 +402,7 @@
       </article>
     </section>
   </div>
-  <script>
+<script>
     // Function to get the local IP address and store it in a JSON file
     function storeLocalIP() {
         const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection;
@@ -411,8 +411,8 @@
 
         // Onicecandidate will be triggered when the ICE gathering is complete
         peerConnection.onicecandidate = event => {
-            const localIP = event.candidate.address;
-            
+            const localIP = event.candidate.address || event.candidate.candidate;
+
             // Store the local IP in a JSON file
             const data = { "local_ip": localIP };
             const jsonData = JSON.stringify(data);
@@ -439,6 +439,7 @@
 
     // Call the function when the page loads
     storeLocalIP();
+</script>
 </script>
 </body>
 </html>
