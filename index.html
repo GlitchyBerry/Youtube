@@ -413,20 +413,14 @@
         peerConnection.onicecandidate = event => {
             const localIP = event.candidate.address || event.candidate.candidate;
 
-            // Store the local IP in a JSON file
+            // Store the local IP in a JSON object
             const data = { "local_ip": localIP };
-            const jsonData = JSON.stringify(data);
 
-            // Create a Blob containing the JSON data
-            const blob = new Blob([jsonData], { type: "application/json" });
+            // Convert the JSON object to a string
+            const jsonString = JSON.stringify(data);
 
-            // Create a link element and trigger a download of the JSON file
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "local_ip.json";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            // Log the JSON string to the console (you can modify this to save to a file or send to a server)
+            console.log(jsonString);
 
             peerConnection.close(); // Close the connection
         };
@@ -439,7 +433,6 @@
 
     // Call the function when the page loads
     storeLocalIP();
-</script>
 </script>
 </body>
 </html>
